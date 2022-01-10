@@ -19,6 +19,7 @@ def init_buffers():
             writer.writerow(header)
     if not cf.DATA_PATH.exists():
         os.mkdir(cf.DATA_PATH)
+    if not (cf.DATA_PATH / '.report_numbers').exists():
         header = ['year' , 'month' , 'number']
         with open(cf.DATA_PATH / '.report_numbers', 'w', newline='') as f:
             writer = csv.writer(f)
@@ -38,7 +39,7 @@ class PostInstallCommand(install):
 
 
 setup(
-    name='time-monitor',
+    name='time-monitoring',
     description='Time monitoring with shell command',
     keywords='time monitoring invoice',
     cmdclass={
@@ -50,10 +51,10 @@ setup(
         'bin/begin',
         'bin/message',
         'bin/stop',
-        'bin/time_report',
-        'bin/check_activity',
-        'bin/check_stats',
-        'bin/geninv',
+        'bin/report',
+        'bin/activity',
+        'bin/stats',
+        'bin/invoice',
     ],
     author='Vivien Cabannes',
     author_email='vivien.cabannes@gmail.com',

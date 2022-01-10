@@ -28,9 +28,9 @@ $ stop
 ```
 When you stop an activity and do not begin a new one, run this command.
 
-- The `time_report` command
+- The `report` command
 ```
-$ time_report
+$ report
 ```
 This command saves all activities recorded since last report in order to generate a new report.
 This is useful to generate statistics or invoices.  
@@ -38,16 +38,22 @@ Reports are numbered according the the format `<YYYY><MM><NB>` where `<YYYY>` an
 Past activity reports are kept in a `data` folder specified by the variable `DATA_PATH` of the `time_monitoring/config.py` file.
 
 #### Advanced commands
-- The `check_activity` command
+- The `activity` command
 ```
-$ check_activity
+$ activity
 ```
 This command opens the buffer file that records your current activity.
 It is useful to check make sure you have declared it correctly and eventually correct it.
 
-- The `geninv` command
+- The `stats` command
 ```
-$ geninv -a --activity <activity> -o --output <output file> -p --partial -l --latex <main.tex>
+$ stats
+```
+This command sums up current period activities.
+
+- The `invoice` command
+```
+$ invoice -a --activity <activity> -o --output <output file> -p --partial -l --latex <main.tex>
 ```
 This command is useful to generate invoices.
 
@@ -57,6 +63,6 @@ The package is based on python and shell.
 
 We provide an installation through the `pipy` package repository, hence you can use pip to download it.
 ```
-$ pip install time_monitor
+$ pip install time-monitoring
 ```
 If you are working with `conda` environments, make sure that your pip command is linked to conda by typing `$ which pip` and making sure that the output displays conda installation path.

@@ -51,7 +51,7 @@ def new_report():
         writer.writerow(header)
 
 
-def get_last_report_path():
+def get_last_report_number():
     """Get last report file path
 
     Read information in file .report_numbers.
@@ -66,16 +66,15 @@ def get_last_report_path():
             number = row[2]
         else:
             return ValueError('No report have been generated')
-    file_name = year + month + number + '.csv'
-    report_path = DATA_PATH / file_name
-    return report_path
+    return year + month + number
 
 
-def read_report(report_path):
+def read_report(report_number):
     """Extract precious information from report file
 
     Compute total number of hours per activity, clustered by days.
     """
+    report_path = DATA_PATH / (report_number + '.csv')
     with open(report_path, 'r', newline='') as f:
         rows = list(csv.reader(f, delimiter=','))[1:]
         activities, messages, dates, lengths = [], [], [], []
