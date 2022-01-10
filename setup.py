@@ -4,14 +4,23 @@ from setuptools.command.develop import develop
 from setuptools.command.install import install
 
 
-def init_buffers(bf, rf):
+def init_buffers():
     import csv
-    if not bf.exists():
-        with open(bf, 'w', newline='') as f:
+    import os
+    import time_monitor.config as cf
+
+    if not cf.BUFFER_FILE.exists():
+        with open(cf.BUFFER_FILE, 'w', newline='') as f:
             pass
-    if not rf.exists():
-        header = ['year', 'month', 'number']
-        with open(rf, 'w', newline='') as f:
+    if not cf.REPORT_FILE.exists():
+        header = ['activity' , 'begin' , 'end' , 'length' , 'message',]
+        with open(cf.REPORT_FILE, 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(header)
+    if not cf.DATA_PATH.exists():
+        os.mkdir(cf.DATA_PATH)
+        header = ['year' , 'month' , 'number']
+        with open(cf.DATA_PATH / '.report_numbers', 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(header)
 
@@ -19,15 +28,13 @@ class PostDevelopCommand(develop):
     """Post-installation for development mode."""
     def run(self):
         develop.run(self)
-        import time_monitor.config as cf
-        init_buffers(cf.BUFFER_FILE, cf.REPORT_FILE)
+        init_buffers()
 
 class PostInstallCommand(install):
     """Post-installation for installation mode."""
     def run(self):
         install.run(self)
-        import time_monitor.config as cf
-        init_buffers(cf.BUFFER_FILE, cf.REPORT_FILE)
+        init_buffers()
 
 
 setup(
@@ -43,7 +50,9 @@ setup(
         'bin/begin',
         'bin/message',
         'bin/stop',
+        'bin/time_report',
         'bin/check_activity',
+        'bin/check_stats',
         'bin/geninv',
     ],
     author='Vivien Cabannes',

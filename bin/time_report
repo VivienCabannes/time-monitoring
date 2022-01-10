@@ -1,0 +1,4 @@
+#!/usr/bin/env python
+from time_monitor import new_report
+
+new_report()

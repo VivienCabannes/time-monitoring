@@ -6,4 +6,9 @@ from .activity import (
 )
 from .config import (
     BUFFER_FILE,
+    REPORT_FILE
+)
+from .report import (
+    new_report,
+    read_report
 )

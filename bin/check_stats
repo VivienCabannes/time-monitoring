@@ -1,0 +1,9 @@
+#!/usr/bin/env python
+from time_monitor import (
+     REPORT_FILE,
+     read_report
+)
+
+activities, outputs, totals, messages = read_report(REPORT_FILE)
+for a, t in zip(activities, totals):
+    print('{}: {}'.format(a, t[1]), flush=True)
