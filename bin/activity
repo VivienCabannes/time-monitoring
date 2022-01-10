@@ -7,4 +7,4 @@ from time_monitor import BUFFER_FILE
 EDITOR = os.environ.get('EDITOR','vim')
 
 
-edit = subprocess.call([EDITOR, BUFFER_FILE])
+edit = subprocess.run([EDITOR, BUFFER_FILE])

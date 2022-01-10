@@ -75,6 +75,7 @@ def read_report(report_number):
     Compute total number of hours per activity, clustered by days.
     """
     report_path = DATA_PATH / (report_number + '.csv')
+    begin_date, end_date = None, None
     with open(report_path, 'r', newline='') as f:
         rows = list(csv.reader(f, delimiter=','))[1:]
         activities, messages, dates, lengths = [], [], [], []
@@ -84,6 +85,9 @@ def read_report(report_number):
             message = message.replace(' - ', '\n')
             length = int(length)
             date = t0[:10]
+
+            if begin_date is None:
+                begin_date = date
 
             # if activity has already been define
             if activity in activities:
@@ -104,6 +108,7 @@ def read_report(report_number):
                 messages.append(message + '\n')
                 dates.append([date, ])
                 lengths.append([length, ])
+        end_date = date
 
     # convert length to string
     outputs, totals = [], []
@@ -120,4 +125,4 @@ def read_report(report_number):
         outputs.append(output)
         totals.append([total, dt])
 
-    return activities, outputs, totals, messages
+    return activities, outputs, totals, messages, (begin_date, end_date)

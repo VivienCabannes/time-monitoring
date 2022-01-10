@@ -1,0 +1,40 @@
+%%% Packages
+%% Page geometry
+\usepackage{geometry}
+\newgeometry{
+  top=2cm, left=2cm, right=2cm, bottom=2cm,
+  headheight=0pt, headsep=0pt, footskip=0pt
+}
+\pagestyle{empty}
+
+%% Encoding
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+
+%% Fonts
+% \usepackage{newtxtext}
+\usepackage{lmodern}
+\renewcommand{\familydefault}{\sfdefault}
+
+%% Links
+\PassOptionsToPackage{hyphens}{url}
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
+
+%% Essentials
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{enumitem}
+\setitemize{itemsep=0pt,parsep=0pt,topsep=0pt}
+\setenumerate{itemsep=0pt,parsep=0pt,topsep=0pt}
+\usepackage{parskip}
+% \setlength{\parindent}{0pt}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

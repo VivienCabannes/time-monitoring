@@ -1,1 +1,9 @@
 #!/usr/bin/env python
+from time_monitor import (
+    compile_latex,
+    invoice_macro,
+)
+
+
+invoice_macro()
+compile_latex()

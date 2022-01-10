@@ -1,0 +1,40 @@
+\documentclass[11pt,a4paper]{article}
+\include{preambule}
+\include{constants}
+\include{macros}
+
+\begin{document}
+
+\begin{minipage}[t]{.5\textwidth}
+  {\color{RoyalBlue}\Large \name}\\
+  \myaddress\\
+  \href{mailto:\mail}{\mail}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+  {\color{RoyalBlue}\Large \client}\\
+  \clientaddress\\
+  \url{\clientwebsite}
+\end{minipage}%
+
+\vspace{1cm}
+
+{\Large {\color{RoyalBlue} Invoice n\textsuperscript{o}} \invoicenumber
+  \hfill from \datestart to \dateend}
+
+\vspace{1cm}
+
+{\Large \color{RoyalBlue} Hours worked:}
+
+\begin{tabular}{rl}
+  \fillhours
+\end{tabular}
+
+\vspace{1cm}
+
+{\Large \color{RoyalBlue} Summary:}
+
+Total hours worked: \totalhours\\
+Hourly rate: \$\price\\
+{\bf Total: \$\totalprice}
+
+\end{document}

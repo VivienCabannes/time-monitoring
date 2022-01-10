@@ -7,3 +7,12 @@ dist/
 *.egg-info/
 */__pycache__/
 *.ipynb*
+
+*/auto/
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.pdf
+*.pdf-view-restore
