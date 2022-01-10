@@ -1,4 +1,7 @@
 
+import glob
+import os
+import shutil
 import subprocess
 from .config import LATEX_PATH
 from .report import (
@@ -52,8 +55,22 @@ def compile_latex(invoice_nb=None):
                 print(output.strip())
             break
 
-    process = subprocess.run(['mv', 'main.pdf', invoice_nb + '.pdf'],
-                             stdout=subprocess.PIPE,
-                             universal_newlines=True,
-                             cwd=LATEX_PATH,
-                            )
+    process = subprocess.run(['mv', 'main.pdf', invoice_nb + '.pdf'], cwd=LATEX_PATH)
+    clean_latex(LATEX_PATH)
+
+
+def clean_latex(main_path):
+    """Cleat latex auxilliary files"""
+    def rm(path_list):
+        for path in path_list:
+            if os.path.isdir(path):
+                shutil.rmtree(path)
+            else:
+                os.remove(path)
+
+    rm(glob.glob(str(main_path / '*.aux')))
+    rm(glob.glob(str(main_path / 'auto')))
+    rm(glob.glob(str(main_path / '*.fbd_latexmk')))
+    rm(glob.glob(str(main_path / '*.fls')))
+    rm(glob.glob(str(main_path / '*.out')))
+    rm(glob.glob(str(main_path / '.pdf-view-restore')))

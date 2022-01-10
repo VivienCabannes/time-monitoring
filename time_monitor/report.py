@@ -69,16 +69,17 @@ def get_last_report_number():
     return year + month + number
 
 
-def read_report(report_number):
+def read_report(report_path):
     """Extract precious information from report file
 
     Compute total number of hours per activity, clustered by days.
     """
-    report_path = DATA_PATH / (report_number + '.csv')
-    begin_date, end_date = None, None
+    if isinstance(report_path, str):
+        report_path = DATA_PATH / (report_path + '.csv')
     with open(report_path, 'r', newline='') as f:
         rows = list(csv.reader(f, delimiter=','))[1:]
         activities, messages, dates, lengths = [], [], [], []
+        begin_date = None
         for row in rows:
             # retrieve informations
             activity, t0, tf, length, message = row
@@ -108,7 +109,10 @@ def read_report(report_number):
                 messages.append(message + '\n')
                 dates.append([date, ])
                 lengths.append([length, ])
+    try:
         end_date = date
+    except UnboundLocalError:
+        end_date = None
 
     # convert length to string
     outputs, totals = [], []
