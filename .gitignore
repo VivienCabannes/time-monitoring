@@ -1,0 +1,9 @@
+data/
+.activity
+.current_report.csv
+
+build/
+dist/
+*.egg-info/
+*/__pycache__/
+*.ipynb*
