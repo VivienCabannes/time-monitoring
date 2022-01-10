@@ -38,11 +38,12 @@ setup(
         'develop': PostDevelopCommand,
         'install': PostInstallCommand,
     },
-    package=['time_monitor'],
+    packages=['time_monitor'],
     scripts=[
         'bin/begin',
         'bin/message',
         'bin/stop',
+        'bin/check_activity',
         'bin/geninv',
     ],
     author='Vivien Cabannes',
