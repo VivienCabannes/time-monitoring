@@ -7,23 +7,36 @@ from setuptools.command.install import install
 def init_buffers():
     import csv
     import os
-    import src.time_monitor.config as cf
+    from pathlib import Path
+    import shutil
 
-    if not cf.BUFFER_FILE.exists():
-        with open(cf.BUFFER_FILE, 'w', newline='') as f:
+    CODE_PATH = Path.home() / 'time-monitoring'
+    DATA_PATH = CODE_PATH / 'data'
+    LATEX_PATH = CODE_PATH / 'latex'
+    BUFFER_FILE = CODE_PATH / '.activity'
+    REPORT_FILE = CODE_PATH / '.current_report.csv'
+
+    if not CODE_PATH.exists():
+        os.mkdir(CODE_PATH)
+    if not DATA_PATH.exists():
+        os.mkdir(DATA_PATH)
+    if not BUFFER_FILE.exists():
+        with open(BUFFER_FILE, 'w', newline='') as f:
             pass
-    if not cf.REPORT_FILE.exists():
+    if not REPORT_FILE.exists():
         header = ['activity' , 'begin' , 'end' , 'length' , 'message',]
-        with open(cf.REPORT_FILE, 'w', newline='') as f:
+        with open(REPORT_FILE, 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(header)
-    if not cf.DATA_PATH.exists():
-        os.mkdir(cf.DATA_PATH)
-    if not (cf.DATA_PATH / '.report_numbers').exists():
+    if not (DATA_PATH / '.report_numbers').exists():
         header = ['year' , 'month' , 'number']
-        with open(cf.DATA_PATH / '.report_numbers', 'w', newline='') as f:
+        with open(DATA_PATH / '.report_numbers', 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(header)
+
+    latex_src = str(Path(__file__).resolve().parents[0] / 'latex')
+    shutil.copytree(latex_src, LATEX_PATH, symlinks=True)
+
 
 class PostDevelopCommand(develop):
     """Post-installation for development mode."""
