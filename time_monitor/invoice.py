@@ -10,7 +10,7 @@ from .report import (
 )
 
 
-def invoice_macro(report_nb=None, price=150, activity='work'):
+def invoice_macro(report_nb=None, price=150, activity='work', change=1.1298):
     """Generate tex macro in order to generate invoice with LaTeX"""
     if report_nb is None:
         report_nb = get_last_report_number()
@@ -20,7 +20,7 @@ def invoice_macro(report_nb=None, price=150, activity='work'):
     ind = activities.index(activity)
 
     total_price = int(totals[ind][0] * price * 100) / 100
-    euro_price = int(100 * total_price / change) / 100
+    second_price = int(100 * total_price / change) / 100
 
     file_path = LATEX_PATH / 'macros.tex'
     with open(file_path, 'w') as f:
@@ -31,6 +31,8 @@ def invoice_macro(report_nb=None, price=150, activity='work'):
         f.write('\\newcommand{\\invoicenumber}{' + str(report_nb) + '}\n')
         f.write('\\newcommand{\\datestart}{' + str(dates[0]) + '}\n')
         f.write('\\newcommand{\\dateend}{' + str(dates[1]) + '}\n')
+        f.write('\\newcommand{\\pricechange}{' + str(change) + '}\n')
+        f.write('\\newcommand{\\secondprice}{' + str(second_price) + '}\n')
 
 
 def compile_latex(invoice_nb=None):

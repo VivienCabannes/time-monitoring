@@ -3,6 +3,16 @@
 The `time-monitoring` package provides useful tools to monitor your time.
 It can be used to improve productivity, or to generate invoice.
 
+## Installation
+**Requirements**:
+The package is based on python and shell.  
+
+We provide an installation through the `pipy` package repository, hence you can use pip to download it.
+```
+$ pip install time-monitoring
+```
+If you are working with `conda` environments, make sure that your pip command is linked to conda by typing `$ which pip` and making sure that the output displays conda installation path.
+
 ## Shell commands
 This package provides the following shell executables.
 
@@ -47,22 +57,14 @@ It is useful to check make sure you have declared it correctly and eventually co
 
 - The `stats` command
 ```
-$ stats
+$ stats -r --report <report number>
 ```
-This command sums up current period activities.
+This command sums up current period activities, or the activities saved in the report `<report number>`.
 
 - The `invoice` command
 ```
-$ invoice -a --activity <activity> -o --output <output file> -p --partial -l --latex <main.tex>
+$ invoice -a --activity <activity> -r --report <report number> -p --price <hourly rate> -c --change <change rate> -i --invoice <invoice number>
 ```
-This command is useful to generate invoices.
-
-## Installation
-**Requirements**:
-The package is based on python and shell.  
-
-We provide an installation through the `pipy` package repository, hence you can use pip to download it.
-```
-$ pip install time-monitoring
-```
-If you are working with `conda` environments, make sure that your pip command is linked to conda by typing `$ which pip` and making sure that the output displays conda installation path.
+This command is useful to generate invoices. 
+You can bill at a given `<hourly rate>` price for a given `<activity>` regarding houred reported in the report `<report number>`.
+The generated pdf file will be located in the `latex` folder of this code source.
