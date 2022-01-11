@@ -7,6 +7,10 @@ It can be used to improve productivity, or to generate invoice.
 **Requirements**:
 The package is based on python and shell.  
 
+#### Current
+Download the code, change the `srr/time_monitoring/config.py` file to point out to your code path, and run `python setup.py install`.
+
+#### Future
 We provide an installation through the `pipy` package repository, hence you can use pip to download it.
 ```
 $ pip install time-monitoring

@@ -14,6 +14,7 @@ args = parser.parse_args()
 
 declare_activity(args.activity)
 
-for ms in args.message:
-    for m in ms:
-        add_message(m)
+if args.message:
+    for ms in args.message:
+        for m in ms:
+            add_message(m)

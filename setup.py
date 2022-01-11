@@ -7,7 +7,7 @@ from setuptools.command.install import install
 def init_buffers():
     import csv
     import os
-    import time_monitor.config as cf
+    import src.time_monitor.config as cf
 
     if not cf.BUFFER_FILE.exists():
         with open(cf.BUFFER_FILE, 'w', newline='') as f:
@@ -39,25 +39,11 @@ class PostInstallCommand(install):
 
 
 setup(
-    name='time-monitoring',
-    description='Time monitoring with shell command',
-    keywords='time monitoring invoice',
     cmdclass={
         'develop': PostDevelopCommand,
         'install': PostInstallCommand,
     },
     packages=['time_monitor'],
-    scripts=[
-        'bin/begin',
-        'bin/message',
-        'bin/stop',
-        'bin/report',
-        'bin/activity',
-        'bin/stats',
-        'bin/invoice',
-    ],
-    author='Vivien Cabannes',
-    author_email='vivien.cabannes@gmail.com',
-    version='0.0.1',
-    license='MIT',
+    package_dir={'time_monitor': 'src/time_monitor'},
+    python_requires='>=3.6',
 )
