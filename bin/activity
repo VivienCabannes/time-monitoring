@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import os
 import subprocess
-from pathlib import Path
 from time_monitor import BUFFER_FILE
 
 EDITOR = os.environ.get('EDITOR','vim')

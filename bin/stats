@@ -4,6 +4,7 @@ from time_monitor import (
      read_report
 )
 
+
 activities, outputs, totals, messages, dates = read_report(REPORT_FILE)
 for a, t in zip(activities, totals):
     print('{}: {}'.format(a, t[1]), flush=True)
