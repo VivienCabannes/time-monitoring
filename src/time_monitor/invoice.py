@@ -1,19 +1,26 @@
 
 import glob
 import os
+from pathlib import Path
 import shutil
 import subprocess
-from .config import LATEX_PATH
+from .config import (
+    INVOICE_DESTINATION,
+    LATEX_PATH,
+)
 from .report import (
     get_last_report_number,
     read_report,
 )
+from pkg_resources import resource_string
 
 
-def invoice_macro(report_nb=None, price=150, activity='work', change=1.1298):
+def invoice_macro(report_nb=None, price=150, activity='work', change=1, invoice_nb=None):
     """Generate tex macro in order to generate invoice with LaTeX"""
     if report_nb is None:
         report_nb = get_last_report_number()
+    if invoice_nb is None:
+        invoice_nb = report_nb
 
     activities, outputs, totals, messages, dates = read_report(report_nb)
 
@@ -28,7 +35,7 @@ def invoice_macro(report_nb=None, price=150, activity='work', change=1.1298):
         f.write('\\newcommand{\\totalhours}{' + totals[ind][1] + '}\n')
         f.write('\\newcommand{\\price}{' + str(price) + '}\n')
         f.write('\\newcommand{\\totalprice}{' + str(total_price) + '}\n')
-        f.write('\\newcommand{\\invoicenumber}{' + str(report_nb) + '}\n')
+        f.write('\\newcommand{\\invoicenumber}{' + str(invoice_nb) + '}\n')
         f.write('\\newcommand{\\datestart}{' + str(dates[0]) + '}\n')
         f.write('\\newcommand{\\dateend}{' + str(dates[1]) + '}\n')
         f.write('\\newcommand{\\pricechange}{' + str(change) + '}\n')
@@ -56,8 +63,8 @@ def compile_latex(invoice_nb=None):
             for output in process.stdout.readlines():
                 print(output.strip())
             break
-
-    process = subprocess.run(['mv', 'main.pdf', invoice_nb + '.pdf'], cwd=LATEX_PATH)
+    dest = str(INVOICE_DESTINATION / (invoice_nb + '.pdf'))
+    process = subprocess.run(['mv', 'main.pdf', dest], cwd=LATEX_PATH)
     clean_latex(LATEX_PATH)
 
 

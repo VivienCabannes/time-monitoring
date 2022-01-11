@@ -7,15 +7,24 @@ It can be used to improve productivity, or to generate invoice.
 **Requirements**:
 The package is based on python and shell.  
 
-#### Current
-Download the code, change the `srr/time_monitoring/config.py` file to point out to your code path, and run `python setup.py install`.
-
-#### Future
 We provide an installation through the `pipy` package repository, hence you can use pip to download it.
 ```
 $ pip install time-monitoring
 ```
 If you are working with `conda` environments, make sure that your pip command is linked to conda by typing `$ which pip` and making sure that the output displays conda installation path.
+
+Once you have intall the package, you should initialize buffer files with the following command
+```
+$ setup_time_report
+```
+Buffers files are kept in the folder `time-monitoring` of your home directory.
+This is specified by the `BUFFER_PATH` variable in the file `src/time_monitor/config.py`.
+If you want to modify this location, you should download the code source, modify those variables and build the package (*e.g.* by running `$ python setup.py install`).
+
+There is few variables that are fixed for you, that you might want to change if you were to use this package to it full potential.
+In particular, there is macros defines in the file `sys.prefix / latex / invoice / constants.tex` where `sys.prefix` is the prefix of your python installation that can be check in `python` by importing the `sys` module and printing the value of `sys.prefix`.
+
+#### Future
 
 ## Shell commands
 This package provides the following shell executables.

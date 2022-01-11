@@ -13,9 +13,9 @@ parser.add_argument('-i', "--invoice", type=str, help="invoice identification nu
 parser.add_argument('-p', "--price", type=float, help="charged hourly rates", default=150)
 parser.add_argument('-c', "--change", type=float, help="currency change (for invoices with two currencies)", default=1)
 args = parser.parse_args()
-
-invoice_macro(activity=args.activity, report_nb=args.report, price=args.price, change=args.change)
-
 if args.invoice is None:
     args.invoice_nb = args.report
+
+invoice_macro(activity=args.activity, report_nb=args.report, invoice_nb=args.invoice_nb,
+              price=args.price, change=args.change)
 compile_latex(invoice_nb=args.invoice_nb)
