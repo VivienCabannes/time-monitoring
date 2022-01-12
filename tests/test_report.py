@@ -3,7 +3,7 @@ import csv
 import os
 from subprocess import PIPE, Popen, run
 
-from .fixtures import ACT2, ACT3, ACTIVITY, BUFFER_FILE, DATA_PATH, MESSAGE, REPORT_FILE, ROWS
+from .conftest import BUFFER_FILE, DATA_PATH, REPORT_FILE
 
 
 def test_report_header():
@@ -21,64 +21,59 @@ def test_report_header():
     assert rows[0] == ["activity", "begin", "end", "length", "message"]
 
 
-def test_pipeline_3b_1s():
+def test_pipeline_3b_1s(activity, act2, act3, message):
     """Test pipeline with three begin commands and one stop"""
     if (
-        run(["begin", ACTIVITY], check=True).returncode
-        or run(["begin", ACT2], check=True).returncode
-        or run(["message", MESSAGE], check=True).returncode
-        or run(["begin", ACT3], check=True).returncode
+        run(["begin", activity], check=True).returncode
+        or run(["begin", act2], check=True).returncode
+        or run(["message", message], check=True).returncode
+        or run(["begin", act3], check=True).returncode
     ):
         assert False
     with open(REPORT_FILE, "r", encoding="ascii", newline="") as f:
         rows = list(csv.reader(f, delimiter=","))
     assert len(rows) == 3
-    assert rows[1][0] == ACTIVITY
-    assert rows[2][0] == ACT2
+    assert rows[1][0] == activity
+    assert rows[2][0] == act2
     assert rows[1][-1] == ""
-    assert rows[2][-1] == MESSAGE
+    assert rows[2][-1] == message
     with open(BUFFER_FILE, "r", encoding="ascii") as f:
         tmp = f.read().splitlines()
     assert len(tmp) == 2
-    assert tmp[0] == ACT3
+    assert tmp[0] == act3
 
     assert not run(["stop"], check=True).returncode
     with open(REPORT_FILE, "r", encoding="ascii", newline="") as f:
         rows = list(csv.reader(f, delimiter=","))
     assert len(rows) == 4
-    assert rows[1][0] == ACTIVITY
-    assert rows[2][0] == ACT2
-    assert rows[3][0] == ACT3
+    assert rows[1][0] == activity
+    assert rows[2][0] == act2
+    assert rows[3][0] == act3
     assert rows[1][-1] == ""
-    assert rows[2][-1] == MESSAGE
+    assert rows[2][-1] == message
     assert rows[3][-1] == ""
 
 
-def test_stats():
+def test_stats(activity_report, activity, act2, act3, act1_time, act2_time, act3_time):
     """Correct behavior of `stats` command"""
     with open(REPORT_FILE, "w", encoding="ascii", newline="") as f:
         writer = csv.writer(f)
-        writer.writerows(ROWS)
+        writer.writerows(activity_report)
 
-    with Popen(["stats"], stdout=PIPE, stderr=PIPE) as process:
+    with Popen(["stats"], stdout=PIPE, stderr=PIPE, text=True) as process:
         (out, err) = process.communicate()
 
-    assert (
-        out
-        == b"my activity: 5.8h (5h48m)\n"
-        + b"second: 7.7h (7h42m)\n"
-        + b"my third activity: 5.083h (5h05m)\n"
-    )
-    assert err == b""
+    assert out == f"{activity}: {act1_time}\n{act2}: {act2_time}\n{act3}: {act3_time}\n"
+    assert err == ""
 
-    with Popen(["stats", "-a", ACT2, ACT3], stdout=PIPE, stderr=PIPE) as process:
+    with Popen(["stats", "-a", act2, act3], stdout=PIPE, stderr=PIPE, text=True) as process:
         (out, err) = process.communicate()
 
-    assert out == b"second: 7.7h (7h42m)\n" + b"my third activity: 5.083h (5h05m)\n"
-    assert err == b""
+    assert out == f"{act2}: {act2_time}\n{act3}: {act3_time}\n"
+    assert err == ""
 
 
-def report():
+def report(activity_report):
     """Correct behavior of `report` command"""
     with Popen("ls", cwd=DATA_PATH, stdout=PIPE, text=True) as process:
         out_before = process.stdout.readlines()
@@ -98,4 +93,4 @@ def report():
     with open(DATA_PATH / file_name, "r", encoding="ascii", newline="") as f:
         rows = list(csv.reader(f, delimiter=","))
 
-    assert rows == ROWS
+    assert rows == activity_report

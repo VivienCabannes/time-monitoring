@@ -1,7 +1,7 @@
 """Testing for basic command"""
 from subprocess import PIPE, Popen
 
-from .fixtures import ACTIVITY, BUFFER_FILE, DATE, MESSAGE
+from .conftest import BUFFER_FILE
 
 
 def test_setup():
@@ -23,34 +23,34 @@ def test_begin_no_argument():
     assert tmp[1] == b"begin: error: the following arguments are required: activity"
 
 
-def test_begin():
+def test_begin(activity):
     """Correct behavior of `begin` command"""
-    with Popen(["begin", ACTIVITY], stdout=PIPE, stderr=PIPE) as process:
+    with Popen(["begin", activity], stdout=PIPE, stderr=PIPE) as process:
         (out, err) = process.communicate()
     assert out == b""
     assert err == b""
     with open(BUFFER_FILE, "r", encoding="ascii") as f:
         tmp = f.read().splitlines()
     assert len(tmp) == 2
-    assert tmp[0] == ACTIVITY
+    assert tmp[0] == activity
 
 
-def test_begin_option():
+def test_begin_option(activity, message):
     """Command `begin` with one option"""
-    with Popen(["begin", ACTIVITY, "-m", MESSAGE], stdout=PIPE, stderr=PIPE) as process:
+    with Popen(["begin", activity, "-m", message], stdout=PIPE, stderr=PIPE) as process:
         (out, err) = process.communicate()
     assert out == b""
     assert err == b""
     with open(BUFFER_FILE, "r", encoding="ascii") as f:
         tmp = f.read().splitlines()
     assert len(tmp) == 3
-    assert tmp[0] == ACTIVITY
-    assert tmp[2] == MESSAGE
+    assert tmp[0] == activity
+    assert tmp[2] == message
 
 
-def test_begin_options():
+def test_begin_options(activity, message):
     """Command `begin` with many options"""
-    cmd = ["begin", ACTIVITY, "-m", MESSAGE, MESSAGE, MESSAGE]
+    cmd = ["begin", activity, "-m", message, message, message]
     with Popen(cmd, stdout=PIPE, stderr=PIPE) as process:
         (out, err) = process.communicate()
     assert out == b""
@@ -58,10 +58,10 @@ def test_begin_options():
     with open(BUFFER_FILE, "r", encoding="ascii") as f:
         tmp = f.read().splitlines()
     assert len(tmp) == 5
-    assert tmp[0] == ACTIVITY
-    assert tmp[2] == MESSAGE
-    assert tmp[3] == MESSAGE
-    assert tmp[4] == MESSAGE
+    assert tmp[0] == activity
+    assert tmp[2] == message
+    assert tmp[3] == message
+    assert tmp[4] == message
 
 
 def test_message_no_argument():
@@ -74,27 +74,27 @@ def test_message_no_argument():
     assert tmp[1] == b"message: error: the following arguments are required: message"
 
 
-def test_message():
+def test_message(activity, date, message):
     """Correct behavior of `message` command"""
-    tmp = [ACTIVITY + "\n", DATE + "\n"]
+    tmp = [activity + "\n", date + "\n"]
     with open(BUFFER_FILE, "w", encoding="ascii") as f:
         f.writelines(tmp)
-    with Popen(["message", MESSAGE], stdout=PIPE, stderr=PIPE) as process:
+    with Popen(["message", message], stdout=PIPE, stderr=PIPE) as process:
         (out, err) = process.communicate()
     assert out == b""
     assert err == b""
     with open(BUFFER_FILE, "r", encoding="ascii") as f:
         tmp = f.read().splitlines()
     assert len(tmp) == 3
-    assert tmp[0] == ACTIVITY
-    assert tmp[2] == MESSAGE
+    assert tmp[0] == activity
+    assert tmp[2] == message
 
 
-def test_message_without_activity():
+def test_message_without_activity(message):
     """Command `message` when no activity are on-going"""
     with open(BUFFER_FILE, "w", encoding="ascii") as f:
         f.writelines([])
-    with Popen(["message", MESSAGE], stdout=PIPE, stderr=PIPE) as process:
+    with Popen(["message", message], stdout=PIPE, stderr=PIPE) as process:
         (out, err) = process.communicate()
     assert out == b"No activity in progress\n"
     assert err == b""
@@ -103,19 +103,19 @@ def test_message_without_activity():
     assert tmp == b""
 
 
-def test_message_arguments():
+def test_message_arguments(activity, date, message):
     """Command `message` with many arguments"""
-    tmp = [ACTIVITY + "\n", DATE + "\n"]
+    tmp = [activity + "\n", date + "\n"]
     with open(BUFFER_FILE, "w", encoding="ascii") as f:
         f.writelines(tmp)
-    with Popen(["message", MESSAGE, MESSAGE, MESSAGE], stdout=PIPE, stderr=PIPE) as process:
+    with Popen(["message", message, message, message], stdout=PIPE, stderr=PIPE) as process:
         (out, err) = process.communicate()
     assert out == b""
     assert err == b""
     with open(BUFFER_FILE, "r", encoding="ascii") as f:
         tmp = f.read().splitlines()
     assert len(tmp) == 5
-    assert tmp[0] == ACTIVITY
-    assert tmp[2] == MESSAGE
-    assert tmp[3] == MESSAGE
-    assert tmp[4] == MESSAGE
+    assert tmp[0] == activity
+    assert tmp[2] == message
+    assert tmp[3] == message
+    assert tmp[4] == message
