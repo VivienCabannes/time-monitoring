@@ -1,6 +1,4 @@
-data/
-.activity
-.current_report.csv
+*.el
 
 build/
 dist/

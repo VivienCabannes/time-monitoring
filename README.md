@@ -24,8 +24,6 @@ If you want to modify this location, you should download the code source, modify
 There is few variables that are fixed for you, that you might want to change if you were to use this package to it full potential.
 In particular, there is macros defines in the file `sys.prefix / latex / invoice / constants.tex` where `sys.prefix` is the prefix of your python installation that can be check in `python` by importing the `sys` module and printing the value of `sys.prefix`.
 
-#### Future
-
 ## Shell commands
 This package provides the following shell executables.
 

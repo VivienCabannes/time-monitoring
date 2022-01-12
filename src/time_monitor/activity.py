@@ -1,7 +1,6 @@
-
+"""Back-end for activity report"""
 import csv
 from datetime import datetime
-from pathlib import Path
 import os
 
 from .config import (
@@ -19,8 +18,8 @@ def declare_activity(str_activity):
     """
     end_activity()
     # begin time
-    t = datetime.utcnow()
-    str_t = t.strftime(DATE_FORMAT)
+    dat = datetime.utcnow()
+    str_t = dat.strftime(DATE_FORMAT)
     with open(BUFFER_FILE, 'w') as f:
         f.write(str_activity + '\n' + str_t + '\n')
 
@@ -58,7 +57,7 @@ def end_activity(verbose=False):
         f.seek(0, 0)
         # retrive information
         activity = f.readline()[:-1]
-        t0 = f.readline()[:-1]
+        t = f.readline()[:-1]
         message = f.read()[:-1].replace('\n', ' - ')
 
     # clean file
@@ -67,13 +66,13 @@ def end_activity(verbose=False):
 
     # report final time
     tf = datetime.utcnow()
-    dt = tf - datetime.strptime(t0, DATE_FORMAT)
+    dt = tf - datetime.strptime(t, DATE_FORMAT)
     # get duration
     length = dt.days * 1440 + dt.seconds // 60
     tf = tf.strftime(DATE_FORMAT)
 
     # create a report
-    report = [activity, t0, tf, length, message,]
+    report = [activity, t, tf, length, message]
     with open(REPORT_FILE, 'a', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(report)

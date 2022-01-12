@@ -1,7 +1,6 @@
-
+"""Back-end for invoice generation"""
 import glob
 import os
-from pathlib import Path
 import shutil
 import subprocess
 from .config import (
@@ -12,7 +11,6 @@ from .report import (
     get_last_report_number,
     read_report,
 )
-from pkg_resources import resource_string
 
 
 def invoice_macro(report_nb=None, price=150, activity='work', change=1, invoice_nb=None):
@@ -22,7 +20,7 @@ def invoice_macro(report_nb=None, price=150, activity='work', change=1, invoice_
     if invoice_nb is None:
         invoice_nb = report_nb
 
-    activities, outputs, totals, messages, dates = read_report(report_nb)
+    activities, outputs, totals, _, dates = read_report(report_nb)
 
     ind = activities.index(activity)
 
@@ -51,7 +49,7 @@ def compile_latex(invoice_nb=None):
                                stdout=subprocess.PIPE,
                                universal_newlines=True,
                                cwd=LATEX_PATH,
-                              )
+                               )
     while True:
         output = process.stdout.readline()
         print(output.strip(), flush=True)
@@ -64,22 +62,22 @@ def compile_latex(invoice_nb=None):
                 print(output.strip())
             break
     dest = str(INVOICE_DESTINATION / (invoice_nb + '.pdf'))
-    process = subprocess.run(['mv', 'main.pdf', dest], cwd=LATEX_PATH)
+    process = subprocess.run(['mv', 'main.pdf', dest], cwd=LATEX_PATH, check=True)
     clean_latex(LATEX_PATH)
 
 
 def clean_latex(main_path):
     """Cleat latex auxilliary files"""
-    def rm(path_list):
+    def remove(path_list):
         for path in path_list:
             if os.path.isdir(path):
                 shutil.rmtree(path)
             else:
                 os.remove(path)
 
-    rm(glob.glob(str(main_path / '*.aux')))
-    rm(glob.glob(str(main_path / 'auto')))
-    rm(glob.glob(str(main_path / '*.fbd_latexmk')))
-    rm(glob.glob(str(main_path / '*.fls')))
-    rm(glob.glob(str(main_path / '*.out')))
-    rm(glob.glob(str(main_path / '.pdf-view-restore')))
+    remove(glob.glob(str(main_path / '*.aux')))
+    remove(glob.glob(str(main_path / 'auto')))
+    remove(glob.glob(str(main_path / '*.fbd_latexmk')))
+    remove(glob.glob(str(main_path / '*.fls')))
+    remove(glob.glob(str(main_path / '*.out')))
+    remove(glob.glob(str(main_path / '.pdf-view-restore')))

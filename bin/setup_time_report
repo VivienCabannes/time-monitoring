@@ -12,12 +12,12 @@ if not cf.BUFFER_FILE.exists():
     with open(cf.BUFFER_FILE, 'w', newline='') as f:
         pass
 if not cf.REPORT_FILE.exists():
-    header = ['activity' , 'begin' , 'end' , 'length' , 'message',]
+    header = ['activity', 'begin', 'end', 'length', 'message']
     with open(cf.REPORT_FILE, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(header)
 if not (cf.DATA_PATH / '.report_numbers').exists():
-    header = ['year' , 'month' , 'number']
+    header = ['year', 'month', 'number']
     with open(cf.DATA_PATH / '.report_numbers', 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(header)

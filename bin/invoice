@@ -7,11 +7,16 @@ from time_monitor import (
 
 
 parser = argparse.ArgumentParser(description='Generate pdf invoice')
-parser.add_argument('-a', "--activity", type=str, default='work', help="activity to bill for")
-parser.add_argument('-r', "--report", type=str, help="report number to bill for [default: last report]")
-parser.add_argument('-i', "--invoice", type=str, help="invoice identification number")
-parser.add_argument('-p', "--price", type=float, help="charged hourly rates", default=150)
-parser.add_argument('-c', "--change", type=float, help="currency change (for invoices with two currencies)", default=1)
+parser.add_argument('-a', "--activity", type=str, default='work',
+                    help="activity to bill for")
+parser.add_argument('-r', "--report", type=str,
+                    help="report number to bill for [default: last report]")
+parser.add_argument('-i', "--invoice", type=str,
+                    help="invoice identification number")
+parser.add_argument('-p', "--price", type=float, default=150,
+                    help="charged hourly rates")
+parser.add_argument('-c', "--change", type=float, default=1,
+                    help="currency change (for invoices with two currencies)")
 args = parser.parse_args()
 if args.invoice is None:
     args.invoice_nb = args.report

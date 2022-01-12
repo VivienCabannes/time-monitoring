@@ -1,8 +1,7 @@
-
+"""Report back-end"""
 import csv
 from datetime import datetime
 import os
-from pathlib import Path
 
 from .config import (
     REPORT_FILE,
@@ -45,7 +44,7 @@ def new_report():
     os.rename(REPORT_FILE, file_path)
 
     # reset buffer file to report future work
-    header = ['activity' , 'begin' , 'end' , 'length' , 'message',]
+    header = ['activity', 'begin', 'end', 'length', 'message', ]
     with open(REPORT_FILE, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(header)
@@ -82,10 +81,10 @@ def read_report(report_path):
         begin_date = None
         for row in rows:
             # retrieve informations
-            activity, t0, tf, length, message = row
+            activity, t, _, length, message = row
             message = message.replace(' - ', '\n')
             length = int(length)
-            date = t0[:10]
+            date = t[:10]
 
             if begin_date is None:
                 begin_date = date

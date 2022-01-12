@@ -7,7 +7,8 @@ from time_monitor import (
 
 
 parser = argparse.ArgumentParser(description='Generate pdf invoice')
-parser.add_argument('-r', "--report", type=str, help="report number to check for statistics [default: current report]")
+parser.add_argument('-r', "--report", type=str,
+                    help="report number to check for statistics [default: current report]")
 args = parser.parse_args()
 
 if args.report is None:
