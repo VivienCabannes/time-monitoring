@@ -14,7 +14,7 @@ def new_report():
     # get report number
     date = datetime.utcnow().strftime('%Y-%m')
     year, month = date[:4], date[-2:]
-    with open(DATA_PATH / '.report_numbers', 'r+', newline='') as f:
+    with open(DATA_PATH / '.report_numbers', 'r+', encoding='ascii', newline='') as f:
         rows = list(csv.reader(f))
 
         number = 1
@@ -33,7 +33,7 @@ def new_report():
         rows.insert(1, [year, month, number])
 
     # report new report
-    with open(DATA_PATH / '.report_numbers', 'w', newline='') as f:
+    with open(DATA_PATH / '.report_numbers', 'w', encoding='ascii', newline='') as f:
         writer = csv.writer(f)
         for row in rows:
             writer.writerow(row)
@@ -45,7 +45,7 @@ def new_report():
 
     # reset buffer file to report future work
     header = ['activity', 'begin', 'end', 'length', 'message', ]
-    with open(REPORT_FILE, 'w', newline='') as f:
+    with open(REPORT_FILE, 'w', encoding='ascii', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(header)
 
@@ -55,7 +55,7 @@ def get_last_report_number():
 
     Read information in file .report_numbers.
     """
-    with open(DATA_PATH / '.report_numbers', 'r+', newline='') as f:
+    with open(DATA_PATH / '.report_numbers', 'r+', encoding='ascii', newline='') as f:
         rows = list(csv.reader(f))
         if len(rows) > 1:
             # report are ordered, so only looked for last one
@@ -75,7 +75,7 @@ def read_report(report_path):
     """
     if isinstance(report_path, str):
         report_path = DATA_PATH / (report_path + '.csv')
-    with open(report_path, 'r', newline='') as f:
+    with open(report_path, 'r', encoding='ascii', newline='') as f:
         rows = list(csv.reader(f, delimiter=','))[1:]
         activities, messages, dates, lengths = [], [], [], []
         begin_date = None
@@ -89,7 +89,7 @@ def read_report(report_path):
             if begin_date is None:
                 begin_date = date
 
-            # if activity has already been define
+            # if activity has already been defined
             if activity in activities:
                 index = activities.index(activity)
                 messages[index] += message + '\n'

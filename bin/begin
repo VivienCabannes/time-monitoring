@@ -8,13 +8,12 @@ from time_monitor import (
 
 parser = argparse.ArgumentParser(description='Report the start of a new activity')
 parser.add_argument("activity", type=str, help="activity you have just begun")
-parser.add_argument("-m", "--message", action='append', nargs='+',
+parser.add_argument("-m", "--message", nargs='+',
                     help="message(s) specifying on-going task(s)")
 args = parser.parse_args()
 
 declare_activity(args.activity)
 
 if args.message:
-    for ms in args.message:
-        for m in ms:
-            add_message(m)
+    for mes in args.message:
+        add_message(mes)

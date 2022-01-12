@@ -5,6 +5,7 @@ dist/
 *.egg-info/
 **/__pycache__/
 *.ipynb*
+.eggs/
 
 latex/macros.tex
 */auto/

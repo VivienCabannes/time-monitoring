@@ -28,7 +28,7 @@ def invoice_macro(report_nb=None, price=150, activity='work', change=1, invoice_
     second_price = int(100 * total_price / change) / 100
 
     file_path = LATEX_PATH / 'macros.tex'
-    with open(file_path, 'w') as f:
+    with open(file_path, 'w', encoding='ascii') as f:
         f.write('\\newcommand{\\fillhours}{' + outputs[ind] + '}\n')
         f.write('\\newcommand{\\totalhours}{' + totals[ind][1] + '}\n')
         f.write('\\newcommand{\\price}{' + str(price) + '}\n')
@@ -45,22 +45,19 @@ def compile_latex(invoice_nb=None):
     if invoice_nb is None:
         invoice_nb = get_last_report_number()
 
-    process = subprocess.Popen(['pdflatex', 'main.tex'],
-                               stdout=subprocess.PIPE,
-                               universal_newlines=True,
-                               cwd=LATEX_PATH,
-                               )
-    while True:
-        output = process.stdout.readline()
-        print(output.strip(), flush=True)
-        # Check for process completion
-        return_code = process.poll()
-        if return_code is not None:
-            print('RETURN CODE', return_code, flush=True)
-            # Process has finished, read rest of the output
-            for output in process.stdout.readlines():
-                print(output.strip())
-            break
+    with subprocess.Popen(['pdflatex', 'main.tex'], stdout=subprocess.PIPE,
+                          universal_newlines=True, cwd=LATEX_PATH) as process:
+        while True:
+            output = process.stdout.readline()
+            print(output.strip(), flush=True)
+            # Check for process completion
+            return_code = process.poll()
+            if return_code is not None:
+                print('RETURN CODE', return_code, flush=True)
+                # Process has finished, read rest of the output
+                for output in process.stdout.readlines():
+                    print(output.strip())
+                break
     dest = str(INVOICE_DESTINATION / (invoice_nb + '.pdf'))
     process = subprocess.run(['mv', 'main.pdf', dest], cwd=LATEX_PATH, check=True)
     clean_latex(LATEX_PATH)

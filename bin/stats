@@ -6,13 +6,20 @@ from time_monitor import (
 )
 
 
-parser = argparse.ArgumentParser(description='Generate pdf invoice')
+parser = argparse.ArgumentParser(description='Show time report statistics')
 parser.add_argument('-r', "--report", type=str,
                     help="report number to check for statistics [default: current report]")
+parser.add_argument('-a', "--activity", nargs='+',
+                    help="filter activities to display time report")
 args = parser.parse_args()
 
 if args.report is None:
     args.report = REPORT_FILE
 activities, outputs, totals, messages, dates = read_report(args.report)
-for a, t in zip(activities, totals):
-    print('{}: {}'.format(a, t[1]), flush=True)
+
+for act, t in zip(activities, totals):
+    if args.activity:
+        if act in args.activity:
+            print('{}: {}'.format(act, t[1]), flush=True)
+    else:
+        print('{}: {}'.format(act, t[1]), flush=True)
