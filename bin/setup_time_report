@@ -1,23 +1,23 @@
 #!/usr/bin/env python
 import csv
 import os
-from time_monitor import config as cf
 
+from time_monitor import config as cf
 
 if not cf.BUFFER_PATH.exists():
     os.mkdir(cf.BUFFER_PATH)
 if not cf.DATA_PATH.exists():
     os.mkdir(cf.DATA_PATH)
 if not cf.BUFFER_FILE.exists():
-    with open(cf.BUFFER_FILE, 'w', encoding='ascii', newline='') as f:
+    with open(cf.BUFFER_FILE, "w", encoding="ascii", newline="") as f:
         pass
 if not cf.REPORT_FILE.exists():
-    header = ['activity', 'begin', 'end', 'length', 'message']
-    with open(cf.REPORT_FILE, 'w', encoding='ascii', newline='') as f:
+    header = ["activity", "begin", "end", "length", "message"]
+    with open(cf.REPORT_FILE, "w", encoding="ascii", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(header)
-if not (cf.DATA_PATH / '.report_numbers').exists():
-    header = ['year', 'month', 'number']
-    with open(cf.DATA_PATH / '.report_numbers', 'w', encoding='ascii', newline='') as f:
+if not (cf.DATA_PATH / ".report_numbers").exists():
+    header = ["year", "month", "number"]
+    with open(cf.DATA_PATH / ".report_numbers", "w", encoding="ascii", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(header)

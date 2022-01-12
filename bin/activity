@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 import os
 import subprocess
+
 from time_monitor import BUFFER_FILE
 
-EDITOR = os.environ.get('EDITOR', 'vim')
-
+EDITOR = os.environ.get("EDITOR", "vim")
 
 edit = subprocess.run([EDITOR, BUFFER_FILE], check=True)

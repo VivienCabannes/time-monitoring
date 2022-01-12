@@ -1,26 +1,28 @@
 #!/usr/bin/env python
 import argparse
-from time_monitor import (
-    compile_latex,
-    invoice_macro,
-)
 
+from time_monitor import compile_latex, invoice_macro
 
-parser = argparse.ArgumentParser(description='Generate pdf invoice')
-parser.add_argument('-a', "--activity", type=str, default='work',
+parser = argparse.ArgumentParser(description="Generate pdf invoice")
+parser.add_argument("-a", "--activity", type=str, default="work",
                     help="activity to bill for")
-parser.add_argument('-r', "--report", type=str,
+parser.add_argument("-r", "--report", type=str,
                     help="report number to bill for [default: last report]")
-parser.add_argument('-i', "--invoice", type=str,
+parser.add_argument("-i", "--invoice", type=str,
                     help="invoice identification number")
-parser.add_argument('-p', "--price", type=float, default=150,
+parser.add_argument("-p", "--price", type=float, default=150,
                     help="charged hourly rates")
-parser.add_argument('-c', "--change", type=float, default=1,
+parser.add_argument("-c", "--change", type=float, default=1,
                     help="currency change (for invoices with two currencies)")
 args = parser.parse_args()
 if args.invoice is None:
     args.invoice_nb = args.report
 
-invoice_macro(activity=args.activity, report_nb=args.report, invoice_nb=args.invoice_nb,
-              price=args.price, change=args.change)
+invoice_macro(
+    activity=args.activity,
+    report_nb=args.report,
+    invoice_nb=args.invoice_nb,
+    price=args.price,
+    change=args.change,
+)
 compile_latex(invoice_nb=args.invoice_nb)

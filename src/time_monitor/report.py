@@ -1,20 +1,17 @@
 """Report back-end"""
 import csv
-from datetime import datetime
 import os
+from datetime import datetime
 
-from .config import (
-    REPORT_FILE,
-    DATA_PATH,
-)
+from .config import DATA_PATH, REPORT_FILE
 
 
 def new_report():
     """Save current report file under report-friendly denomination"""
     # get report number
-    date = datetime.utcnow().strftime('%Y-%m')
+    date = datetime.utcnow().strftime("%Y-%m")
     year, month = date[:4], date[-2:]
-    with open(DATA_PATH / '.report_numbers', 'r+', encoding='ascii', newline='') as f:
+    with open(DATA_PATH / ".report_numbers", "r+", encoding="ascii", newline="") as f:
         rows = list(csv.reader(f))
 
         number = 1
@@ -27,25 +24,25 @@ def new_report():
 
         # formatting
         if len(str(number)) < 2:
-            number = '0' + str(number)
+            number = "0" + str(number)
         else:
             number = str(number)
         rows.insert(1, [year, month, number])
 
     # report new report
-    with open(DATA_PATH / '.report_numbers', 'w', encoding='ascii', newline='') as f:
+    with open(DATA_PATH / ".report_numbers", "w", encoding="ascii", newline="") as f:
         writer = csv.writer(f)
         for row in rows:
             writer.writerow(row)
 
     # save current report under report number
-    file_name = year + month + number + '.csv'
+    file_name = year + month + number + ".csv"
     file_path = DATA_PATH / file_name
     os.rename(REPORT_FILE, file_path)
 
     # reset buffer file to report future work
-    header = ['activity', 'begin', 'end', 'length', 'message', ]
-    with open(REPORT_FILE, 'w', encoding='ascii', newline='') as f:
+    header = ["activity", "begin", "end", "length", "message"]
+    with open(REPORT_FILE, "w", encoding="ascii", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(header)
 
@@ -55,7 +52,7 @@ def get_last_report_number():
 
     Read information in file .report_numbers.
     """
-    with open(DATA_PATH / '.report_numbers', 'r+', encoding='ascii', newline='') as f:
+    with open(DATA_PATH / ".report_numbers", "r+", encoding="ascii", newline="") as f:
         rows = list(csv.reader(f))
         if len(rows) > 1:
             # report are ordered, so only looked for last one
@@ -64,7 +61,7 @@ def get_last_report_number():
             month = row[1]
             number = row[2]
         else:
-            return ValueError('No report have been generated')
+            return ValueError("No report have been generated")
     return year + month + number
 
 
@@ -74,15 +71,15 @@ def read_report(report_path):
     Compute total number of hours per activity, clustered by days.
     """
     if isinstance(report_path, str):
-        report_path = DATA_PATH / (report_path + '.csv')
-    with open(report_path, 'r', encoding='ascii', newline='') as f:
-        rows = list(csv.reader(f, delimiter=','))[1:]
+        report_path = DATA_PATH / (report_path + ".csv")
+    with open(report_path, "r", encoding="ascii", newline="") as f:
+        rows = list(csv.reader(f, delimiter=","))[1:]
         activities, messages, dates, lengths = [], [], [], []
         begin_date = None
         for row in rows:
             # retrieve informations
             activity, t, _, length, message = row
-            message = message.replace(' - ', '\n')
+            message = message.replace(" - ", "\n")
             length = int(length)
             date = t[:10]
 
@@ -92,7 +89,7 @@ def read_report(report_path):
             # if activity has already been defined
             if activity in activities:
                 index = activities.index(activity)
-                messages[index] += message + '\n'
+                messages[index] += message + "\n"
 
                 # search if the same activity already took place this day
                 if date in dates[index]:
@@ -116,15 +113,15 @@ def read_report(report_path):
     # convert length to string
     outputs, totals = [], []
     for i in range(len(lengths)):
-        output, total = '', 0
+        output, total = "", 0
         for date, length in zip(dates[i], lengths[i]):
             total += length
-            dt = str(length // 60) + 'h' + str(length % 60).zfill(2) + 'm'
-            output += date + ' :& ' + dt + '\\\\'
+            dt = str(length // 60) + "h" + str(length % 60).zfill(2) + "m"
+            output += date + " :& " + dt + "\\\\"
         minute = str(total % 60)
-        dt = str(total // 60) + 'h' + minute.zfill(2) + 'm'
-        total = round(total / .06) / 1000
-        dt = str(total) + 'h (' + dt + ')'
+        dt = str(total // 60) + "h" + minute.zfill(2) + "m"
+        total = round(total / 0.06) / 1000
+        dt = str(total) + "h (" + dt + ")"
         outputs.append(output)
         totals.append([total, dt])
 

@@ -1,39 +1,33 @@
 """Testing for time reports"""
 import csv
 from datetime import datetime
-from subprocess import Popen, PIPE, run
-from .fixtures import (
-    BUFFER_FILE,
-    REPORT_FILE,
-    DATE_FORMAT,
-    ACTIVITY,
-    DATE,
-    MESSAGE,
-)
+from subprocess import PIPE, Popen, run
+
+from .fixtures import ACTIVITY, BUFFER_FILE, DATE, DATE_FORMAT, MESSAGE, REPORT_FILE
 
 
 def test_stop_without_activity():
     """Command `stop` when no activity are on-going"""
     # Setup environment
-    run(['setup_time_report'], check=True)
+    run(["setup_time_report"], check=True)
 
-    with open(BUFFER_FILE, 'w', encoding='ascii') as f:
+    with open(BUFFER_FILE, "w", encoding="ascii") as f:
         f.writelines([])
-    with Popen(['stop'], stdout=PIPE, stderr=PIPE) as process:
+    with Popen(["stop"], stdout=PIPE, stderr=PIPE) as process:
         (out, err) = process.communicate()
-    assert out == b'No activity in progress\n'
-    assert err == b''
-    with open(BUFFER_FILE, 'rb') as f:
+    assert out == b"No activity in progress\n"
+    assert err == b""
+    with open(BUFFER_FILE, "rb") as f:
         tmp = f.read()
-    assert tmp == b''
+    assert tmp == b""
 
 
 def test_stop():
     """Correct behavior of `stop` command"""
-    tmp = [ACTIVITY + '\n', DATE + '\n']
-    with open(BUFFER_FILE, 'w', encoding='ascii') as f:
+    tmp = [ACTIVITY + "\n", DATE + "\n"]
+    with open(BUFFER_FILE, "w", encoding="ascii") as f:
         f.writelines(tmp)
-    with Popen(['stop'], stdout=PIPE, stderr=PIPE) as process:
+    with Popen(["stop"], stdout=PIPE, stderr=PIPE) as process:
         # record end time
         tf = datetime.utcnow()
         dt = tf - datetime.strptime(DATE, DATE_FORMAT)
@@ -41,25 +35,23 @@ def test_stop():
         tf = tf.strftime(DATE_FORMAT)
         # get process execution variable
         (out, err) = process.communicate()
-    assert out == b''
-    assert err == b''
-    with open(REPORT_FILE, 'r', encoding='ascii', newline='') as f:
-        rows = list(csv.reader(f, delimiter=','))
+    assert out == b""
+    assert err == b""
+    with open(REPORT_FILE, "r", encoding="ascii", newline="") as f:
+        rows = list(csv.reader(f, delimiter=","))
     assert abs(length - int(rows[-1][3])) < 1
-    assert rows[-1] == [
-        ACTIVITY, DATE, rows[-1][2], rows[-1][3], ''
-    ]
-    with open(BUFFER_FILE, 'rb') as f:
+    assert rows[-1] == [ACTIVITY, DATE, rows[-1][2], rows[-1][3], ""]
+    with open(BUFFER_FILE, "rb") as f:
         tmp = f.read()
-    assert tmp == b''
+    assert tmp == b""
 
 
 def test_stop_message():
     """Command `stop` when one message was posted"""
-    tmp = [ACTIVITY + '\n', DATE + '\n', MESSAGE + '\n']
-    with open(BUFFER_FILE, 'w', encoding='ascii') as f:
+    tmp = [ACTIVITY + "\n", DATE + "\n", MESSAGE + "\n"]
+    with open(BUFFER_FILE, "w", encoding="ascii") as f:
         f.writelines(tmp)
-    with Popen(['stop'], stdout=PIPE, stderr=PIPE) as process:
+    with Popen(["stop"], stdout=PIPE, stderr=PIPE) as process:
         # record end time
         tf = datetime.utcnow()
         dt = tf - datetime.strptime(DATE, DATE_FORMAT)
@@ -67,25 +59,23 @@ def test_stop_message():
         tf = tf.strftime(DATE_FORMAT)
         # get process execution variable
         (out, err) = process.communicate()
-    assert out == b''
-    assert err == b''
-    with open(REPORT_FILE, 'r', encoding='ascii', newline='') as f:
-        rows = list(csv.reader(f, delimiter=','))
+    assert out == b""
+    assert err == b""
+    with open(REPORT_FILE, "r", encoding="ascii", newline="") as f:
+        rows = list(csv.reader(f, delimiter=","))
     assert abs(length - int(rows[-1][3])) < 1
-    assert rows[-1] == [
-        ACTIVITY, DATE, rows[-1][2], rows[-1][3], MESSAGE
-    ]
-    with open(BUFFER_FILE, 'rb') as f:
+    assert rows[-1] == [ACTIVITY, DATE, rows[-1][2], rows[-1][3], MESSAGE]
+    with open(BUFFER_FILE, "rb") as f:
         tmp = f.read()
-    assert tmp == b''
+    assert tmp == b""
 
 
 def test_stop_messages():
     """Command `stop` when several messages was posted"""
-    tmp = [ACTIVITY + '\n', DATE + '\n', MESSAGE + '\n', MESSAGE + '\n', MESSAGE + '\n']
-    with open(BUFFER_FILE, 'w', encoding='ascii') as f:
+    tmp = [ACTIVITY + "\n", DATE + "\n", MESSAGE + "\n", MESSAGE + "\n", MESSAGE + "\n"]
+    with open(BUFFER_FILE, "w", encoding="ascii") as f:
         f.writelines(tmp)
-    with Popen(['stop'], stdout=PIPE, stderr=PIPE) as process:
+    with Popen(["stop"], stdout=PIPE, stderr=PIPE) as process:
         # record end time
         tf = datetime.utcnow()
         dt = tf - datetime.strptime(DATE, DATE_FORMAT)
@@ -93,14 +83,18 @@ def test_stop_messages():
         tf = tf.strftime(DATE_FORMAT)
         # get process execution variable
         (out, err) = process.communicate()
-    assert out == b''
-    assert err == b''
-    with open(REPORT_FILE, 'r', encoding='ascii', newline='') as f:
-        rows = list(csv.reader(f, delimiter=','))
+    assert out == b""
+    assert err == b""
+    with open(REPORT_FILE, "r", encoding="ascii", newline="") as f:
+        rows = list(csv.reader(f, delimiter=","))
     assert abs(length - int(rows[-1][3])) < 1
     assert rows[-1] == [
-        ACTIVITY, DATE, rows[-1][2], rows[-1][3], MESSAGE + ' - ' + MESSAGE + ' - ' + MESSAGE
+        ACTIVITY,
+        DATE,
+        rows[-1][2],
+        rows[-1][3],
+        MESSAGE + " - " + MESSAGE + " - " + MESSAGE,
     ]
-    with open(BUFFER_FILE, 'rb') as f:
+    with open(BUFFER_FILE, "rb") as f:
         tmp = f.read()
-    assert tmp == b''
+    assert tmp == b""

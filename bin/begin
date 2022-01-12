@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 import argparse
-from time_monitor import (
-    add_message,
-    declare_activity,
-)
 
+from time_monitor import add_message, declare_activity
 
-parser = argparse.ArgumentParser(description='Report the start of a new activity')
+parser = argparse.ArgumentParser(description="Report the start of a new activity")
 parser.add_argument("activity", type=str, help="activity you have just begun")
-parser.add_argument("-m", "--message", nargs='+',
-                    help="message(s) specifying on-going task(s)")
+parser.add_argument("-m", "--message", nargs="+", help="message(s) specifying on-going task(s)")
 args = parser.parse_args()
 
 declare_activity(args.activity)

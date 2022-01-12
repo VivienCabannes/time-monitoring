@@ -1,7 +1,7 @@
 """Setup file"""
 import os
-from setuptools import setup
 
+from setuptools import setup
 
 setup(
     data_files=[
