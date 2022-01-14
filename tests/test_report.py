@@ -3,7 +3,7 @@ import csv
 import os
 from subprocess import PIPE, Popen, run
 
-from .conftest import BUFFER_FILE, DATA_PATH, REPORT_FILE
+from time_monitor.config import BUFFER_FILE, DATA_PATH, REPORT_FILE
 
 
 def test_report_header():

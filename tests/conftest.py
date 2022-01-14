@@ -1,18 +1,33 @@
-
 """Variables for unit tests"""
+from pathlib import Path
+from shutil import rmtree
+from subprocess import run
+
 import pytest
+from time_monitor.config import BUFFER_PATH
 
-try:
-    from time_monitor.config import BUFFER_FILE, DATA_PATH, DATE_FORMAT, REPORT_FILE
-except ModuleNotFoundError as e:
-    print(e)
-    from pathlib import Path
 
-    BUFFER_PATH = Path.home() / ".time-monitoring"
-    BUFFER_FILE = BUFFER_PATH / ".activity"
-    DATA_PATH = BUFFER_PATH / "data"
-    DATE_FORMAT = "%Y-%m-%d %H:%M"
-    REPORT_FILE = BUFFER_PATH / ".current_report.csv"
+@pytest.fixture(scope="session", autouse=True)
+def buffer_isolation():
+    """Avoid overwritting the current buffer while testing"""
+
+    # Move buffer to a temporary folder
+    tmp_path = Path.home() / ".tmp-time-monitoring"
+    if BUFFER_PATH.exists():
+        run(["mv", str(BUFFER_PATH), str(tmp_path)], check=True)
+
+    # instanciate a new buffer folder
+    run(["setup_time_report"], check=True)
+
+    # run unit test
+    yield
+
+    # remove the testing buffers
+    rmtree(BUFFER_PATH)
+
+    # move back the old buffer folder
+    if tmp_path.exists():
+        run(["mv", str(tmp_path), str(BUFFER_PATH)], check=True)
 
 
 @pytest.fixture
@@ -91,16 +106,16 @@ def activity_report(activity, act2, act3, message):
 @pytest.fixture
 def act1_time():
     """time recorded as `act1` in `activity_report`"""
-    return '5.8h (5h48m)'
+    return "5.8h (5h48m)"
 
 
 @pytest.fixture
 def act2_time():
     """time recorded as `act2` in `activity_report`"""
-    return '7.7h (7h42m)'
+    return "7.7h (7h42m)"
 
 
 @pytest.fixture
 def act3_time():
     """time recorded as `act3` in `activity_report`"""
-    return '5.083h (5h05m)'
+    return "5.083h (5h05m)"

@@ -3,7 +3,7 @@ import csv
 from datetime import datetime
 from subprocess import PIPE, Popen, run
 
-from .conftest import BUFFER_FILE, DATE_FORMAT, REPORT_FILE
+from time_monitor.config import BUFFER_FILE, DATE_FORMAT, REPORT_FILE
 
 
 def test_stop_without_activity():

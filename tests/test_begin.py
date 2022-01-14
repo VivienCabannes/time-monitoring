@@ -1,7 +1,7 @@
 """Testing for basic command"""
 from subprocess import PIPE, Popen
 
-from .conftest import BUFFER_FILE
+from time_monitor.config import BUFFER_FILE
 
 
 def test_setup():
