@@ -1,7 +1,7 @@
 # Time monitoring
 
 The `time-monitoring` package provides useful tools to monitor your time.
-It can be used to improve productivity, or to generate invoice.
+It can be used to improve productivity, or to generate invoices.
 
 ## Installation
 **Requirements**:
@@ -13,16 +13,13 @@ $ pip install time-monitoring
 ```
 If you are working with `conda` environments, make sure that your pip command is linked to conda by typing `$ which pip` and making sure that the output displays conda installation path.
 
-Once you have intall the package, you should initialize buffer files with the following command
+Once you have install the package, you should initialize buffer files with the following command
 ```
 $ setup_time_report
 ```
 Buffers files are kept in the folder `time-monitoring` of your home directory.
 This is specified by the `BUFFER_PATH` variable in the file `src/time_monitor/config.py`.
 If you want to modify this location, you should download the code source, modify those variables and build the package (*e.g.* by running `$ python setup.py install`).
-
-There is few variables that are chosen for you, that you might want to change if you were to use this package to it full potential.
-In particular, there is macros defines in the file `sys.prefix / latex / invoice / constants.tex` where `sys.prefix` is the prefix of your python installation that can be check in `python` by importing the `sys` module and printing the value of `sys.prefix`.
 
 ## Shell commands
 This package provides the following shell executables.
@@ -41,7 +38,7 @@ If you use this command while another activity was already declared, it will ass
 $ message "<message>" "<first optional message>" [...] "<final optional message>"
 ```
 This command allows you to add a message without modifying the activity you are currently pursuing.
-For example, if you have already declare being in your spare time and decide to read the press and would like to monitor this, you can add the message `"reading the press"`.
+For example, if you have already declared being in your spare time and decide to read the press and would like to monitor this, you can add the message `"reading the press"`.
 
 - The `stop` command
 ```
@@ -53,9 +50,9 @@ When you stop an activity and do not begin a new one, run this command.
 ```
 $ report
 ```
-This command saves all activities recorded since last report in order to generate a new report.
+This command saves all activities recorded since the last report in order to generate a new report.
 This is useful to generate statistics or invoices.  
-Reports are numbered according the the format `<YYYY><MM><NB>` where `<YYYY>` and `<MM>` denominates the current year and month and `<NB>` is counting the number of reports generated so far in the month.  
+Reports are numbered according to the format `<YYYY><MM><NB>` where `<YYYY>` and `<MM>` denote the current year and month and `<NB>` is counting the number of reports generated so far in the month.  
 Past activity reports are kept in a `data` folder specified by the variable `DATA_PATH` of the `time_monitoring/config.py` file.
 
 #### Advanced commands
@@ -64,7 +61,7 @@ Past activity reports are kept in a `data` folder specified by the variable `DAT
 $ activity
 ```
 This command opens the buffer file that records your current activity.
-It is useful to check make sure you have declared it correctly and eventually correct it.
+It is useful to check it to make sure you have declared it correctly and eventually correct it.
 
 - The `stats` command
 ```
@@ -78,4 +75,12 @@ $ invoice -a --activity <activity> -r --report <report number> -p --price <hourl
 ```
 This command is useful to generate invoices. 
 You can bill at a given `<hourly rate>` price for a given `<activity>` regarding houred reported in the report `<report number>`.
-The generated pdf file will be located in the `latex` folder of this code source.
+The generated pdf file will be located in the folder specified by the variable `INVOICE_DESTINATION` in the file `src/time_monitor/config.py`.
+
+#### Advanced installation
+
+For security reason, newer versions of python will not install the latex data files provided by this package -- older versions will install it into your python prefix folder which can be located by importing the `sys` module and printing the value of `sys.prefix`.
+If so, you will need to copy and paste the `latex` folder into the folder specified by the variable `LATEX_PATH` in the config file.
+
+There are few variables that are chosen for you, that you might want to change if you were to use this package to its full potential.
+In particular, there are macros defined in the file `latex / constants.tex`.
