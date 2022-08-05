@@ -21,7 +21,7 @@ Buffers files are kept in the folder `time-monitoring` of your home directory.
 This is specified by the `BUFFER_PATH` variable in the file `src/time_monitor/config.py`.
 If you want to modify this location, you should download the code source, modify those variables and build the package (*e.g.* by running `$ python setup.py install`).
 
-There is few variables that are fixed for you, that you might want to change if you were to use this package to it full potential.
+There is few variables that are chosen for you, that you might want to change if you were to use this package to it full potential.
 In particular, there is macros defines in the file `sys.prefix / latex / invoice / constants.tex` where `sys.prefix` is the prefix of your python installation that can be check in `python` by importing the `sys` module and printing the value of `sys.prefix`.
 
 ## Shell commands
