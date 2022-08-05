@@ -1,4 +1,5 @@
 """Back-end for invoice generation"""
+from datetime import datetime
 import glob
 import os
 import shutil
@@ -22,6 +23,14 @@ def invoice_macro(report_nb=None, price=150, activity="work", change=1, invoice_
     total_price = int(totals[ind][0] * price * 100) / 100
     second_price = int(100 * total_price / change) / 100
 
+    [year, month, day] = datetime.now().strftime('%Y %m %d').split()
+    month = {
+        1: ' janvier ', 2: " f\\'evrier ", 3: ' mars ', 4: ' avril ', 
+        5: ' mai ', 6: ' juin ', 7: ' juillet ', 8: ' aout ', 
+        9: ' septembre ', 10: ' octobre ', 11: ' novembre ', 12: " d\\'ecembre "
+    }[int(month)]
+    french_date = day +  month + year
+
     file_path = LATEX_PATH / "macros.tex"
     with open(file_path, "w", encoding="ascii") as f:
         f.write("\\newcommand{\\fillhours}{" + outputs[ind] + "}\n")
@@ -33,6 +42,7 @@ def invoice_macro(report_nb=None, price=150, activity="work", change=1, invoice_
         f.write("\\newcommand{\\dateend}{" + str(dates[1]) + "}\n")
         f.write("\\newcommand{\\pricechange}{" + str(change) + "}\n")
         f.write("\\newcommand{\\secondprice}{" + str(second_price) + "}\n")
+        f.write("\\newcommand{\\frenchdate}{" + french_date + "}\n")
 
 
 def compile_latex(invoice_nb=None):

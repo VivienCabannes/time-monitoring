@@ -1,4 +1,8 @@
+.coverage
 *.el
+.DS_Store
+
+TODO.md
 
 build/
 dist/
