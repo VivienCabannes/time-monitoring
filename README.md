@@ -1,3 +1,5 @@
+Will move to https://github.com/VivienCabannes/time-tracker
+
 # Time monitoring
 
 The `time-monitoring` package provides useful tools to monitor your time.
